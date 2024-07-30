@@ -2,12 +2,12 @@ const add = (a,b)=>a + b
 
 const subtract = (a,b)=>a - b
 
-const multiply = (a,b)=>a * b
+const multiply = (a,b)=>Math.round(a * b * 100)/100
 
-const divide = (a,b)=>a / b
+const divide = (a,b)=>Math.round(a / b * 100)/100
 
 const reset = ()=> {
-    firstNumber = 0
+    firstNumber = '0'
     secondNumber = null
     operator = null
     display.textContent = 0
@@ -22,7 +22,7 @@ const handleInfinity = ()=> {
 
 const display = document.querySelector('.display')
 
-let firstNumber = 0 , secondNumber = null , operator = null 
+let firstNumber = '0', secondNumber = null , operator = null 
 let mode = 'operand1'
 
 const operate = (firstNum , secondNum , operation)=> {
@@ -54,20 +54,39 @@ const displayControl = (e)=> {
     {
             if( input >= 0 && input <= 9)
             {
-                firstNumber == 0 ? firstNumber = input : firstNumber += input
+                firstNumber == 0 && firstNumber.includes('.') == false
+                 ? firstNumber = input : firstNumber += input
                 display.textContent = firstNumber
             }
             else if(input === '+' || input === '-' || input === '*' || input === '/')
             {
-                operator = input
-                mode = 'operand2'
+                if(firstNumber.length !== 0)
+                {
+                    operator = input
+                    mode = 'operand2'
+                }
+               
             }
+            else if( input === '.' && firstNumber.includes('.') == false)
+            {
+                 firstNumber += input
+                 display.textContent = firstNumber
+            }
+            else if( input == 'DEL' && firstNumber.length !== 0 ||
+                 (firstNumber.length !== 0 && firstNumber[0] == '0' && firstNumber.includes('.') == true))
+            {
+                  firstNumber = firstNumber.slice(0 , -1)   
+                  display.textContent = firstNumber
+            }
+             
+
     }
     else if( mode === 'operand2')
     {
             if( input >= 0 && input <= 9)
             {
-                secondNumber == 0 || secondNumber === null
+                (secondNumber == 0 && secondNumber.includes('.') == false)
+                || secondNumber === null
                  ? secondNumber = input : secondNumber += input
                 display.textContent = secondNumber
             }
@@ -77,7 +96,7 @@ const displayControl = (e)=> {
                 {
                        handleInfinity()
                 }
-                else if(secondNumber !== null)  
+                else if(secondNumber !== null && secondNumber.length !== 0)  
                 {
                     firstNumber = operate(firstNumber , secondNumber , operator)
                     display.textContent = firstNumber
@@ -87,12 +106,33 @@ const displayControl = (e)=> {
                 }
                 
             }
+            else if( input === '.' && secondNumber.includes('.') == false && secondNumber !== null
+        && secondNumber.length !== 0)
+            {
+                secondNumber += input
+                display.textContent = secondNumber
+            }
+            else if( input == 'DEL' && secondNumber.length !== 0 ||
+                (secondNumber.length !== 0 && secondNumber[0] == '0' && secondNumber.includes('.') == true))
+            {
+                 secondNumber = secondNumber.slice(0 , -1)   
+                 display.textContent = secondNumber
+            }
     }
-
-    
-
-    
-    
+    else if( mode == '?')
+    {
+        if( input >= 0 && input <= 9)
+        {
+             mode = 'operand1'
+             firstNumber = input
+             display.textContent = firstNumber
+        }
+        else if(input === '+' || input === '-' || input === '*' || input === '/')
+        {
+            mode = 'operand2'
+            operator = input
+        }
+    }
 
 }
 
@@ -112,12 +152,21 @@ clear.addEventListener('click' , reset)
 result.addEventListener('click' , ()=> {
     if( firstNumber !== null && secondNumber !== null && operator !== null)
     {
-        firstNumber = operate(firstNumber , secondNumber , operator)
-        display.textContent = firstNumber
-        operator = null
-        secondNumber = null
-        mode = 'operand1'
+        if( secondNumber == 0 && operator == '/')
+        {
+                   handleInfinity()
+        }
+        else
+        {
+            firstNumber = operate(firstNumber , secondNumber , operator)
+            display.textContent = firstNumber
+            operator = null
+            secondNumber = null
+            mode = '?'
+    
 
+        }
+       
     }
 
 })
