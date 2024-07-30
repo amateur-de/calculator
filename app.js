@@ -1,3 +1,5 @@
+
+
 const add = (a,b)=>a + b
 
 const subtract = (a,b)=>a - b
@@ -5,6 +7,10 @@ const subtract = (a,b)=>a - b
 const multiply = (a,b)=>Math.round(a * b * 100)/100
 
 const divide = (a,b)=>Math.round(a / b * 100)/100
+
+/*     
+    The above four functions are used to handle the basic mathematical operations
+*/
 
 const reset = ()=> {
     firstNumber = '0'
@@ -14,11 +20,27 @@ const reset = ()=> {
     mode = 'operand1'
 }
 
+/*     
+    The above function contains the code for the AC button
+*/
+
 const handleInfinity = ()=> {
      alert('Division by zero is not defined')
      reset()
 
 }
+
+/*     
+    The above function handles Division by zero
+*/
+
+/*
+    mode = operand1 is used when the first operand is being entered
+    mode = operand2 is used when the second operand is being entered
+    mode = ? is used when the = button is clicked on. If the subsequent
+    input is a number then operand1 is selected. If it's a operator then
+    operand2 is selected.
+*/
 
 const display = document.querySelector('.display')
 
@@ -44,7 +66,9 @@ const operate = (firstNum , secondNum , operation)=> {
     }
 }
 
-
+/* For the del button, The condition in the brackets (firstNumber[0]) is because
+   in JavaScript 0. == 0. The condition is solely because of that property
+*/
 
 const displayControl = (e)=> {
     console.log('Expression class')
@@ -135,6 +159,12 @@ const displayControl = (e)=> {
     }
 
 }
+
+/*
+   The buttons  variable is for all the buttons used in the displayControl function.
+   The clear variable is for AC button.
+   The result variable is for the = button.
+*/
 
 
 const buttons = document.querySelectorAll('.expression')
