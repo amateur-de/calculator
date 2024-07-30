@@ -6,6 +6,20 @@ const multiply = (a,b)=>a * b
 
 const divide = (a,b)=>a / b
 
+const reset = ()=> {
+    firstNumber = 0
+    secondNumber = null
+    operator = null
+    display.textContent = 0
+    mode = 'operand1'
+}
+
+const handleInfinity = ()=> {
+     alert('Division by zero is not defined')
+     reset()
+
+}
+
 const display = document.querySelector('.display')
 
 let firstNumber = 0 , secondNumber = null , operator = null 
@@ -59,7 +73,11 @@ const displayControl = (e)=> {
             }
             else if(input === '+' || input === '-' || input === '*' || input === '/')
             {
-                if(secondNumber !== null)  
+                if( secondNumber == 0 && operator == '/')
+                {
+                       handleInfinity()
+                }
+                else if(secondNumber !== null)  
                 {
                     firstNumber = operate(firstNumber , secondNumber , operator)
                     display.textContent = firstNumber
@@ -89,14 +107,7 @@ const result = document.querySelector('.result')
 
 buttons.forEach((button)=> button.addEventListener('click' , displayControl))
 
-clear.addEventListener('click' , ()=> {
-     firstNumber = 0
-     secondNumber = null
-     operator = null
-     display.textContent = 0
-     mode = 'operand1'
-     
-})
+clear.addEventListener('click' , reset)
 
 result.addEventListener('click' , ()=> {
     if( firstNumber !== null && secondNumber !== null && operator !== null)
